@@ -36,8 +36,7 @@ Hard rules (from the integration spec):
 - Bearer key from standard config, in this precedence:
     1. --api-key flag
     2. $CLEF_API_KEY environment variable
-    3. $EXPERIENTIAL_API_KEY environment variable (legacy name, still honored)
-    4. api_key= in ~/.config/clef-decide/config
+    3. api_key= in ~/.config/clef-decide/config
   Missing everywhere: stops with setup instructions. The key is never
   requested interactively, never logged. Prefer the env var or config
   file — a CLI flag can appear in shell history and process listings.
@@ -108,7 +107,6 @@ JEV_MODEL = "jev-latest"
 SUBQ_ENDPOINT = "https://api.subq.ai/v1/systemone"
 SUBQ_MODEL = "subq-snap-preview"
 KEY_ENV = "CLEF_API_KEY"
-LEGACY_KEY_ENV = "EXPERIENTIAL_API_KEY"
 SUBQ_KEY_ENV = "SUBQ_API_KEY"
 ENDPOINT_ENV = "CLEF_ENDPOINT"
 LUNA_ENDPOINT_ENV = "LUNA_ENDPOINT"
@@ -302,21 +300,19 @@ def resolve_panel_judges(flag_value=None, config_path=None):
 
 
 def resolve_key(flag_value=None, config_path=None):
-    """Standard key precedence: flag > $CLEF_API_KEY > $EXPERIENTIAL_API_KEY
-    (legacy) > config file. Never prompts, never logs."""
+    """Standard key precedence: flag > $CLEF_API_KEY > config file.
+    Never prompts, never logs."""
     if flag_value:
         return flag_value
-    for env in (KEY_ENV, LEGACY_KEY_ENV):
-        v = os.environ.get(env)
-        if v:
-            return v
+    v = os.environ.get(KEY_ENV)
+    if v:
+        return v
     cfg = read_config_file(config_path)
     if cfg.get("api_key"):
         return cfg["api_key"]
     raise ClefError(
-        "no API key found. Provide one via --api-key, $CLEF_API_KEY "
-        "(legacy: $EXPERIENTIAL_API_KEY), or api_key= in "
-        "~/.config/clef-decide/config"
+        "no API key found. Provide one via --api-key, $CLEF_API_KEY, "
+        "or api_key= in ~/.config/clef-decide/config"
     )
 
 
