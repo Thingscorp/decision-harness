@@ -61,7 +61,8 @@ Custom judges never consult the default Experiential key. Missing key for a judg
 - `docs/question-sets.md` — per-phase question sets.
 - `docs/harness-insights.md` — state design, judge selection, cost, measurement.
 - `docs/adding-a-judge.md` — how to define an arbitrary judge in three lines.
-- `examples/` — worked examples.
+- `docs/learnings.md` — operating learnings and principles behind the loop.
+- `examples/` — worked examples, including `examples/reset/`, a worked run on a non-code task.
 - `tests/` — fully mocked test suite.
 
 ## Tests
@@ -76,6 +77,20 @@ CI runs the same suite on Python 3.10, 3.11, and 3.12 on every push and
 pull request (`.github/workflows/tests.yml`). The suite is hermetic: the
 missing-key tests hide any real `~/.config/clef-decide/config`, so results
 do not depend on the machine they run on.
+
+The suite covers request shape, key handling, context budget, gateway
+bounds, judge routing, the Luna decisions route, the SubQ route and its
+key isolation, panel voting, panel composition preferences,
+config-defined custom judges, skeleton-of-judgment, flag conflicts, and
+error surfacing. Live calls are always opt-in: ask before any potentially
+charged call, and never claim it worked without a real response.
+
+## Credit
+
+The tribunal voting rule at the heart of `--panel` (one judge, one vote,
+majority wins, a double tie escalates to a human instead of being
+auto-picked) comes from [Pgeon](https://pgeon.com), Thingscorp's agent
+QA platform, where judge panels decide open questions for agents.
 
 ## License
 

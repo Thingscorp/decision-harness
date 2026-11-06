@@ -24,7 +24,7 @@ rule itself (one judge, one vote, majority wins, double tie escalates) is
 Pgeon technology, borrowed from [Pgeon](https://pgeon.com), Thingscorp's
 agent QA platform.
 
-For decision-harness practices (state design, judge selection, cost tracking, measurement), see `docs/harness-insights.md`.
+For decision-harness practices (state design, judge selection, cost tracking, measurement), see `docs/harness-insights.md`. For the operating principles behind the loop, see `docs/learnings.md`. For a worked run on a non-code task, see `examples/reset/`.
 
 ## Setup
 
@@ -34,7 +34,7 @@ export CLEF_API_KEY=...   # or api_key= in ~/.config/clef-decide/config
 ```
 
 Key precedence (standard): `--api-key` flag → `$CLEF_API_KEY` →
-`$EXPERIENTIAL_API_KEY` (legacy) → config file. The key is never prompted
+`api_key=` in the config file. The key is never prompted
 for, never logged. SubQ is the exception: its own chain (`$SUBQ_API_KEY` →
 `subq_api_key=` in the config file), never the Experiential key. Every claim in this skill's README is backed by a test
 in `tests/` — run `python3 -m unittest discover -s tests` to see the
