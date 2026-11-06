@@ -24,6 +24,8 @@ rule itself (one judge, one vote, majority wins, double tie escalates) is
 Pgeon technology, borrowed from [Pgeon](https://pgeon.com), Thingscorp's
 agent QA platform.
 
+For the operating principles behind the loop, see `docs/learnings.md`. For a worked run on a non code task, see `examples/reset/`.
+
 ## Setup
 
 ```bash
