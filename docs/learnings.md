@@ -105,3 +105,22 @@ We ran the loop on two tasks that were not code. The first pruned a skills docum
 - There was one disclosed executor override. One cut targeted a current owner choice, so the executor did not carry it out. The override was disclosed to the panel and recorded.
 
 What this shows: the tribunal will reject a pass that does no work, even when every judge agreed on the policy. It also shows that curated memory needs judgment, not deletion. The full state is in examples/reset.
+
+## Cycle hardening, 2026-11-05
+
+The panel tested the loop cycles against the failure evidence from the night of 2026-11-05. It voted unanimously for improvement bundle A (5 to 0, mean 0.928).
+
+**Truncation rule.** Any smart LLM run that ends with finish reason `length` is incomplete by definition. A continuation pass is mandatory before assembly. The run record carries the finish reason of every run. This failure was observed twice in one night, once mid sentence in a deliverable appendix.
+
+The other three fixes:
+
+- **Rubber stamp triage:** a judge pass that changes nothing must show it applied the standard entry by entry, with checkable reasons.
+- **Schema conformance:** structured outputs are checked mechanically against the consumer's schema before assembly, and repairs are disclosed.
+- **Preflight:** every external dependency is probed before a cycle starts.
+
+These fixes are available as optional gates in docs/question-sets.md under "Optional cycle hardening gates".
+
+Open items:
+
+- A gate proven only on synthetic records is claimed, not proven, for real use. Until a gate has run on real records, treat it as claimed.
+- A tribunal dissent carries no rationale in the current vote format. Nobody has fixed this yet.
