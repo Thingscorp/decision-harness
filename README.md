@@ -43,7 +43,7 @@ Key and endpoint precedence (first found wins):
 - Environment variables (`$CLEF_API_KEY`, `$CLEF_ENDPOINT`, per-judge `$JUDGE_<NAME>_API_KEY`, etc.)
 - `~/.config/clef-decide/config`
 
-Custom judges never consult the default Experiential key. Missing key for a judge fails loudly when that judge is used.
+Custom judges never consult the default key chain. Missing key for a judge fails loudly when that judge is used.
 
 ## Hard rules (enforced)
 
