@@ -1,6 +1,6 @@
-# Harness insights for panel-loop
+# Harness insights for decision-harness
 
-Lessons from large-scale coding-agent harness comparisons (fixed model, varying scaffold) applied to panel-loop’s decision calls.
+Lessons from large-scale coding-agent harness comparisons (fixed model, varying scaffold) applied to decision-harness’s decision calls.
 
 A decision harness = the state you send + the questions + the judge chosen + context rules + compaction. Small differences in these produce large swings in reliability and cost, just as they do for coding agents.
 
@@ -12,7 +12,7 @@ A decision harness = the state you send + the questions + the judge chosen + con
 - Lightweight, high-signal state often beats verbose dumps. Bash-only style simplicity (concise diffs, failure summaries, explicit criteria) frequently wins.
 - Document the actual differences (prompts/questions, tools/state shape, compaction strategy) and measure them. Anecdotes are not enough.
 
-## Practical recommendations for panel-loop
+## Practical recommendations for decision-harness
 
 **Judge selection**
 - Default high-volume gates (coverage, risk, triage, severity) to the cheapest sufficiently reliable judge (clef-flash or subq).
