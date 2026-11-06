@@ -93,7 +93,7 @@ GOAL = {"done": {"type": "choice", "instructions": "Loop done?",
 
 class TestSotJudge(unittest.TestCase):
     def setUp(self):
-        self.env = patch.dict(os.environ, {"EXPERIENTIAL_API_KEY": "test-key-dummy"})
+        self.env = patch.dict(os.environ, {"CLEF_API_KEY": "test-key-dummy"})
         self.env.start()
 
     def tearDown(self):
@@ -228,7 +228,7 @@ def write_files(tmp, skeleton=SKELETON, goal=GOAL):
 
 class TestSotCli(unittest.TestCase):
     def setUp(self):
-        self.env = patch.dict(os.environ, {"EXPERIENTIAL_API_KEY": "test-key-dummy"})
+        self.env = patch.dict(os.environ, {"CLEF_API_KEY": "test-key-dummy"})
         self.env.start()
 
     def tearDown(self):

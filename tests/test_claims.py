@@ -58,7 +58,7 @@ def counting_opener(captured, behavior="ok"):
 
 class TestClaimEvidence(unittest.TestCase):
     def setUp(self):
-        self.env = patch.dict(os.environ, {"EXPERIENTIAL_API_KEY": "test-key-dummy"})
+        self.env = patch.dict(os.environ, {"CLEF_API_KEY": "test-key-dummy"})
         self.env.start()
 
     def tearDown(self):
@@ -105,7 +105,7 @@ class TestClaimEvidence(unittest.TestCase):
     def test_key_never_prompted_interactively(self):
         self.assertNotRegex(SOURCE, r"\binput\s*\(")
         self.assertNotRegex(SOURCE, r"\bgetpass\b")
-        self.assertIn("EXPERIENTIAL_API_KEY", SOURCE)
+        self.assertNotIn("EXPERIENTIAL_API_KEY", SOURCE)
 
     def test_constants_match_claims(self):
         self.assertEqual(clef.MAX_CONTEXT_TOKENS, 16384)

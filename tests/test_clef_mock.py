@@ -76,7 +76,7 @@ QUESTIONS = {
 
 class TestClefDecide(unittest.TestCase):
     def setUp(self):
-        self.env = patch.dict(os.environ, {"EXPERIENTIAL_API_KEY": "test-key-dummy"})
+        self.env = patch.dict(os.environ, {"CLEF_API_KEY": "test-key-dummy"})
         self.env.start()
 
     def tearDown(self):
@@ -143,7 +143,7 @@ class TestClefDecide(unittest.TestCase):
                              "/nonexistent/clef-decide/test-config"):
             with self.assertRaises(clef.ClefError) as cm:
                 clef.call_clef("clef", "s", QUESTIONS, _opener=make_opener({}))
-        self.assertIn("EXPERIENTIAL_API_KEY", str(cm.exception))
+        self.assertIn("CLEF_API_KEY", str(cm.exception))
 
     def test_context_budget_refuses(self):
         big = "x" * (16384 * 4 + 100)

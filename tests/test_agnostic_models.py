@@ -42,7 +42,7 @@ class FakeResp:
 class TestAgnosticModels(unittest.TestCase):
     def setUp(self):
         self.env = patch.dict(os.environ,
-                              {"EXPERIENTIAL_API_KEY": "test-key-dummy"})
+                              {"CLEF_API_KEY": "test-key-dummy"})
         self.env.start()
 
     def tearDown(self):

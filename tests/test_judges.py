@@ -51,7 +51,7 @@ MIXED_Q = {"done": {"type": "choice", "instructions": "x",
 
 class TestJudgeRouting(unittest.TestCase):
     def setUp(self):
-        self.env = patch.dict(os.environ, {"EXPERIENTIAL_API_KEY": "test-key-dummy"})
+        self.env = patch.dict(os.environ, {"CLEF_API_KEY": "test-key-dummy"})
         self.env.start()
 
     def tearDown(self):
@@ -99,7 +99,7 @@ class TestJudgeRouting(unittest.TestCase):
 
 class TestLunaRoute(unittest.TestCase):
     def setUp(self):
-        self.env = patch.dict(os.environ, {"EXPERIENTIAL_API_KEY": "test-key-dummy"})
+        self.env = patch.dict(os.environ, {"CLEF_API_KEY": "test-key-dummy"})
         self.env.start()
 
     def tearDown(self):
@@ -347,10 +347,10 @@ class TestSubQRoute(unittest.TestCase):
         self.assertIn("sev", cap["body"]["questions"])
 
     def test_subq_key_missing_raises(self):
-        # the Experiential key chain must NOT satisfy the subq judge
+        # another provider key chain must NOT satisfy the subq judge
         # Hermetic: also hide any real ~/.config/clef-decide/config, so the
         # result does not depend on the machine the suite runs on.
-        with patch.dict(os.environ, {"EXPERIENTIAL_API_KEY": "wrong-chain"},
+        with patch.dict(os.environ, {"OTHER_API_KEY": "wrong-chain"},
                         clear=True), \
                 patch.object(clef, "DEFAULT_CONFIG_PATH",
                              "/nonexistent/clef-decide/test-config"):
