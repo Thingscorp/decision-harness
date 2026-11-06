@@ -64,6 +64,18 @@ Custom judges never consult the default Experiential key. Missing key for a judg
 - `examples/` — worked examples.
 - `tests/` — fully mocked test suite.
 
+## Tests
+
+Fully mocked: no network, no keys, no charges.
+
+```bash
+python3 -m unittest discover -s tests
+```
+
+CI runs the same suite on Python 3.10, 3.11, and 3.12 on every push and
+pull request (`.github/workflows/tests.yml`). Note: the missing-key tests
+expect no `~/.config/clef-decide/config` to exist, as on a clean runner.
+
 ## License
 
 MIT. See `LICENSE`.

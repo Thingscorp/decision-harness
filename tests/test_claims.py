@@ -115,8 +115,9 @@ class TestClaimEvidence(unittest.TestCase):
         self.assertEqual(clef.MAX_SCORE_LEVELS, 10)
         self.assertEqual(clef.DEFAULT_TIMEOUT, 60)
 
-    def test_model_allowlist_pinned(self):
-        self.assertEqual(clef.ALLOWED_MODELS, ("clef", "clef-flash", "jev-latest"))
+    def test_no_model_allowlist(self):
+        # LLM-agnostic: no hardcoded allowlist may gate SystemOne models.
+        self.assertFalse(hasattr(clef, "ALLOWED_MODELS"))
         self.assertEqual(clef.JUDGES, ("clef", "clef-flash", "jev", "luna", "subq"))
         self.assertEqual(clef.LUNA_MODEL, "gpt-6-luna-decisions")
         self.assertEqual(clef.SUBQ_MODEL, "subq-snap-preview")

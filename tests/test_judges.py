@@ -77,9 +77,13 @@ class TestJudgeRouting(unittest.TestCase):
         with self.assertRaises(clef.ClefError):
             clef.resolve_judge("luna", "clef")
 
-    def test_model_override_still_allowlisted(self):
-        with self.assertRaises(clef.ClefError):
-            clef.resolve_judge("clef", "gpt-4")
+    def test_model_override_arbitrary_model_accepted(self):
+        # Regression: the allowlist removal must accept any model string
+        # on a SystemOne route, not reject non-built-in names.
+        self.assertEqual(clef.resolve_judge("clef", "gpt-4"),
+                         ("systemone", "gpt-4"))
+        self.assertEqual(clef.resolve_judge("jev", "oracle-1:free"),
+                         ("systemone", "oracle-1:free"))
 
     def test_jev_posts_to_systemone(self):
         cap = {}

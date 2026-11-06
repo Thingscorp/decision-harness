@@ -114,14 +114,14 @@ class TestClefDecide(unittest.TestCase):
         clef.call_clef("clef-flash:free", "s", QUESTIONS, _opener=make_opener(cap))
         self.assertEqual(cap["body"]["model"], "clef-flash:free")
 
-    def test_unknown_clef_variant_rejected(self):
-        for bad in ("gpt-4", "clef-turbo", "clef-", "clefflash", "flash"):
-            with self.assertRaises(clef.ClefError, msg=bad):
-                clef.call_clef(bad, "s", QUESTIONS, _opener=make_opener({}))
-
-    def test_non_clef_model_rejected(self):
-        with self.assertRaises(clef.ClefError):
-            clef.call_clef("gpt-4", "s", QUESTIONS, _opener=make_opener({}))
+    def test_arbitrary_model_accepted_and_sent_exactly(self):
+        # Regression for the allowlist removal: any model string is sent
+        # to the SystemOne endpoint exactly as given; the endpoint, not
+        # this CLI, decides which models it serves.
+        for model in ("gpt-4", "clef-turbo", "oracle-1", "someone-elses-model"):
+            cap = {}
+            clef.call_clef(model, "s", QUESTIONS, _opener=make_opener(cap))
+            self.assertEqual(cap["body"]["model"], model, msg=model)
 
     def test_answers_by_id_and_usage(self):
         cap = {}
