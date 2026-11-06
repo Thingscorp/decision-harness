@@ -348,8 +348,12 @@ class TestSubQRoute(unittest.TestCase):
 
     def test_subq_key_missing_raises(self):
         # the Experiential key chain must NOT satisfy the subq judge
+        # Hermetic: also hide any real ~/.config/clef-decide/config, so the
+        # result does not depend on the machine the suite runs on.
         with patch.dict(os.environ, {"EXPERIENTIAL_API_KEY": "wrong-chain"},
-                        clear=True):
+                        clear=True), \
+                patch.object(clef, "DEFAULT_CONFIG_PATH",
+                             "/nonexistent/clef-decide/test-config"):
             with self.assertRaises(clef.ClefError) as cm:
                 clef.call_judge("subq", "s", CHOICE_Q,
                                 _opener=subq_opener({}))
