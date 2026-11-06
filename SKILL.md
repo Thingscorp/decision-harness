@@ -1,5 +1,5 @@
 ---
-name: panel-loop
+name: decision-harness
 description: >-
   Run the 6-phase recursive QA loop with a tribunal of AI decision judges.
   The agent does the legwork (reads code, writes the sheet, runs tests,
@@ -8,11 +8,11 @@ description: >-
   confidence, and loop termination — through bin/clef-decide. Judges: Clef,
   Clef Flash, Jev, Luna, SubQ; the termination verdict goes to a full tribunal
   vote. Use when the owner says "let the panel drive", "tribunal QA",
-  or drops panel-loop into a repo for a full quality pass.
+  or drops decision-harness into a repo for a full quality pass.
 license: MIT
 ---
 
-# panel-loop
+# decision-harness
 
 ## Purpose
 
@@ -29,7 +29,7 @@ For decision-harness practices (state design, judge selection, cost tracking, me
 ## Setup
 
 ```bash
-git clone https://github.com/Thingscorp/panel-loop.git
+git clone https://github.com/Thingscorp/decision-harness.git
 export CLEF_API_KEY=...   # or api_key= in ~/.config/clef-decide/config
 ```
 
