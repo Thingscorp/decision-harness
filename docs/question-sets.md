@@ -187,6 +187,27 @@ State: `{cases_rerun, passed, failed[], journeys_rerun[], new_failures[]}`.
 
 New failures become new D-IDs and go back to Phase 3.
 
+### Optional: incidents become evals
+
+This addendum is optional. It extends Phase 5 and changes nothing above it.
+
+Every production incident becomes an eval. Someone who knows the code confirms the incident case. The case is added to the regression set and re-run on every later iteration, so a shipped bug cannot ship twice.
+
+Reviewer noise is tracked by disposition. Each reviewer finding is marked Fixed, Wrong, Intentional, or Ignored, so a noisy judge shows up in the counts instead of hiding in the volume.
+
+```json
+{
+  "incident_eval_clean": {
+    "type": "noul",
+    "instructions": "Does the re-run include every confirmed incident case in the regression set, and does every one of those cases pass?",
+    "criteria": {
+      "true": "Every confirmed incident case is in the regression set and passes",
+      "false": "An incident case is missing from the set, or one fails"
+    }
+  }
+}
+```
+
 ---
 
 ## Phase 6 — loop control (independent — same request is fine)
@@ -253,3 +274,83 @@ bin/clef-decide --state-file report.md --questions done.json --panel
 
 A tie re-runs once; a second tie escalates to the owner (exit 2) —
 never auto-pick, never call it done on a tie.
+
+### Optional: scored convergence gate
+
+This addendum is optional. It extends Phase 6 and does not change the panel variant above or any existing gate.
+
+Review rounds are scored with a score question on a 1 to 10 scale, using the criteria bands below. The owner sets the ship bar before the first round. The source practice used 9.5. The owner also sets a hard round cap, and the cap is recorded in the iteration report.
+
+Rounds stop at the bar or at the cap, whichever comes first. If a run stops at the cap without reaching the bar, the report says so and does not record it as a pass.
+
+Without a cap, review loops balloon. In the source practice, a forgotten loop grew a PR to 80,000 lines.
+
+```json
+{
+  "convergence": {
+    "type": "score",
+    "instructions": "Rate the final review score state against the owner's ship bar and the recorded round cap.",
+    "criteria": [
+      "1-3: Blocking findings remain open, or no round cap was recorded in the iteration report.",
+      "4-6: Major findings remain open. The final score is well below the ship bar.",
+      "7-8: Only minor findings remain. The final score is close to the ship bar but has not reached it.",
+      "9-10: The final score meets or exceeds the ship bar within the recorded round cap, with no open blocking findings."
+    ]
+  }
+}
+```
+
+## Optional cycle hardening gates
+
+These gates are optional. They harden any loop run, whether or not it produces code. Each one traces to a failure observed in real runs on 2026-11-05. Add a gate to a cycle's question set wherever the failure it prevents is possible.
+
+### preflight_ready
+
+Before a cycle starts, run one cheap probe per external dependency the run will need. Confirm that judge endpoints answer, that repo auth can write to the target, and that file grants are verified by byte size. The gate asks whether every dependency probed ready. It prevents a credential wall discovered after all content was built.
+
+```json
+{
+  "preflight_ready": {
+    "type": "noul",
+    "instructions": "Judge the proposition: before the cycle started, one cheap probe ran for each external dependency the run needs (judge endpoints answer, repo auth can write to the target, file grants verified by byte size), and every dependency probed ready.",
+    "criteria": {
+      "true": "The run record shows one probe per needed dependency, each with a ready result, logged before any cycle work began.",
+      "false": "A needed dependency was not probed, a probe failed, or probing happened after cycle work had started."
+    }
+  }
+}
+```
+
+### no_rubber_stamp
+
+Ask this after any judge pass that changed nothing: zero cuts, zero findings, or a straight accept. The gate asks whether the pass applied the stated standard entry by entry, with reasons a rerun could check. An empty result is allowed. An unexplained one is not. It prevents a purge judge whose first pass cut zero lines and read as thorough.
+
+```json
+{
+  "no_rubber_stamp": {
+    "type": "noul",
+    "instructions": "Judge the proposition: this judge pass, which changed nothing, applied the stated standard entry by entry and gave reasons a rerun could check.",
+    "criteria": {
+      "true": "The pass output addresses each entry against the stated standard and gives a specific, checkable reason for keeping it.",
+      "false": "The pass gives a blanket verdict, skips entries, or offers reasons too general for a rerun to confirm or refute."
+    }
+  }
+}
+```
+
+### schema_conformant
+
+Check every structured output mechanically against its consumer's schema before assembly. The JSON must parse, required fields must be present, and no extra fields may change meaning. The gate asks whether that check ran and passed, with any format repair disclosed in the run record. It prevents three outputs arriving in a shape the helper could not consume, and a conversion that silently drops a criteria map.
+
+```json
+{
+  "schema_conformant": {
+    "type": "noul",
+    "instructions": "Judge the proposition: every structured output was checked mechanically against its consumer's schema before assembly (JSON parses, required fields present, no extras that change meaning), the check passed, and any format repair is disclosed in the run record.",
+    "criteria": {
+      "true": "A mechanical check ran on every structured output before assembly, all outputs passed, and the run record lists each format repair made.",
+      "false": "An output was not checked, a check failed, or a repair (such as a conversion that dropped fields) is missing from the run record."
+    }
+  }
+}
+```
