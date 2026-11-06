@@ -1,6 +1,6 @@
-# panel-loop
+# decision-harness
 
-A **tribunal of AI decision helpers for coding agents** — five judges, one verdict. `panel-loop` wraps them in a **recursive six-phase QA loop**: the agent does the legwork (reads code, writes the test sheet, runs cases, applies fixes) and the panel makes every judgment call — coverage, deduplication, risk triage, failure triage, severity, fix review, regression verdict, confidence, and loop termination.
+A **tribunal of AI decision helpers for coding agents** — five judges, one verdict. `decision-harness` wraps them in a **recursive six-phase QA loop**: the agent does the legwork (reads code, writes the test sheet, runs cases, applies fixes) and the panel makes every judgment call — coverage, deduplication, risk triage, failure triage, severity, fix review, regression verdict, confidence, and loop termination.
 
 The judges: **Clef** (the thorough reader), **Clef Flash** (the fast 9B for high-volume gates), **Jev** (risk triage and adversarial second opinions), **Luna** (structured scored audits), **SubQ** (SubQ Snap, SystemOne-compatible fast decisions on a separate provider). Routine gates go to the best-fit judge; the termination verdict goes to the full tribunal — **one judge, one vote, majority wins**.
 
@@ -73,7 +73,7 @@ bin/clef-decide --state-file report.md --questions done.json --panel --panel-jud
 
 `done.json` must hold exactly one choice question, e.g. `{"done": {"type": "choice", "instructions": "...", "criteria": {"done": "...", "not_done": "..."}}}`. Use the panel for the loop-termination gate (phase 6) and other high-stakes verdicts; routine gates stay single-judge. `--panel` cannot be combined with `--judge` or `--model`, and contradictory flags fail loudly instead of being silently ignored.
 
-The tribunal rule is **Pgeon technology**: it comes from [Pgeon](https://pgeon.com), Thingscorp's agent QA platform, where a panel of judges decides open questions exactly this way — one judge, one vote, majority wins, ties escalate instead of being auto-picked. panel-loop borrows that rule for its termination verdicts and other high-stakes gates.
+The tribunal rule is **Pgeon technology**: it comes from [Pgeon](https://pgeon.com), Thingscorp's agent QA platform, where a panel of judges decides open questions exactly this way — one judge, one vote, majority wins, ties escalate instead of being auto-picked. decision-harness borrows that rule for its termination verdicts and other high-stakes gates.
 
 ### Adding or removing judges
 
@@ -215,14 +215,14 @@ python3 -m unittest discover -s tests
 - `bin/clef-decide` — the CLI. Python 3, stdlib only, zero dependencies.
 - `docs/quality-loop.md` — the six-phase workflow in full.
 - `docs/question-sets.md` — copy-paste question sets per phase, with state shapes.
-- `docs/harness-insights.md` — lessons from coding-agent harness comparisons applied to panel-loop decision design (state, judge selection, cost, measurement).
+- `docs/harness-insights.md` — lessons from coding-agent harness comparisons applied to decision-harness decision design (state, judge selection, cost, measurement).
 - `examples/launch-readiness/` — worked example: a launch-readiness gate.
 - `llms.txt` — the short machine-readable summary for LLMs and agents.
 - `tests/` — the mocked test suite (`test_clef_mock.py`, `test_claims.py`, `test_config.py`, `test_judges.py`, `test_panel_config.py`, `test_sot.py`).
 
 ## Credit
 
-The tribunal voting rule at the heart of `--panel` — one judge, one vote, majority wins, a double tie escalates to a human instead of being auto-picked — comes from [Pgeon](https://pgeon.com), Thingscorp's agent QA platform, where judge panels decide open questions for agents. panel-loop's `--panel` and `--final-panel` verdicts run on Pgeon technology.
+The tribunal voting rule at the heart of `--panel` — one judge, one vote, majority wins, a double tie escalates to a human instead of being auto-picked — comes from [Pgeon](https://pgeon.com), Thingscorp's agent QA platform, where judge panels decide open questions for agents. decision-harness's `--panel` and `--final-panel` verdicts run on Pgeon technology.
 
 ## License
 
