@@ -73,8 +73,9 @@ python3 -m unittest discover -s tests
 ```
 
 CI runs the same suite on Python 3.10, 3.11, and 3.12 on every push and
-pull request (`.github/workflows/tests.yml`). Note: the missing-key tests
-expect no `~/.config/clef-decide/config` to exist, as on a clean runner.
+pull request (`.github/workflows/tests.yml`). The suite is hermetic: the
+missing-key tests hide any real `~/.config/clef-decide/config`, so results
+do not depend on the machine they run on.
 
 ## License
 
