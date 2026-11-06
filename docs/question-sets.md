@@ -187,6 +187,27 @@ State: `{cases_rerun, passed, failed[], journeys_rerun[], new_failures[]}`.
 
 New failures become new D-IDs and go back to Phase 3.
 
+### Optional: incidents become evals
+
+This addendum is optional. It extends Phase 5 and changes nothing above it.
+
+Every production incident becomes an eval. Someone who knows the code confirms the incident case. The case is added to the regression set and re-run on every later iteration, so a shipped bug cannot ship twice.
+
+Reviewer noise is tracked by disposition. Each reviewer finding is marked Fixed, Wrong, Intentional, or Ignored, so a noisy judge shows up in the counts instead of hiding in the volume.
+
+```json
+{
+  "incident_eval_clean": {
+    "type": "noul",
+    "instructions": "Does the re-run include every confirmed incident case in the regression set, and does every one of those cases pass?",
+    "criteria": {
+      "true": "Every confirmed incident case is in the regression set and passes",
+      "false": "An incident case is missing from the set, or one fails"
+    }
+  }
+}
+```
+
 ---
 
 ## Phase 6 — loop control (independent — same request is fine)
@@ -253,3 +274,28 @@ bin/clef-decide --state-file report.md --questions done.json --panel
 
 A tie re-runs once; a second tie escalates to the owner (exit 2) —
 never auto-pick, never call it done on a tie.
+
+### Optional: scored convergence gate
+
+This addendum is optional. It extends Phase 6 and does not change the panel variant above or any existing gate.
+
+Review rounds are scored with a score question on a 1 to 10 scale, using the criteria bands below. The owner sets the ship bar before the first round. The source practice used 9.5. The owner also sets a hard round cap, and the cap is recorded in the iteration report.
+
+Rounds stop at the bar or at the cap, whichever comes first. If a run stops at the cap without reaching the bar, the report says so and does not record it as a pass.
+
+Without a cap, review loops balloon. In the source practice, a forgotten loop grew a PR to 80,000 lines.
+
+```json
+{
+  "convergence": {
+    "type": "score",
+    "instructions": "Rate the final review score state against the owner's ship bar and the recorded round cap.",
+    "criteria": [
+      "1-3: Blocking findings remain open, or no round cap was recorded in the iteration report.",
+      "4-6: Major findings remain open. The final score is well below the ship bar.",
+      "7-8: Only minor findings remain. The final score is close to the ship bar but has not reached it.",
+      "9-10: The final score meets or exceeds the ship bar within the recorded round cap, with no open blocking findings."
+    ]
+  }
+}
+```
