@@ -1,0 +1,29 @@
+{
+  "q_policy": {
+    "type": "choice",
+    "instructions": "Which purge policy should the executor apply to the agent memory file?",
+    "criteria": {
+      "delete_all": "Turn memory off: empty the file and start fresh.",
+      "keep_all": "Treat the file as curated and leave it unchanged.",
+      "purge_by_standard": "Cut stale, finished, and interim entries; keep rule carrying entries and current owner choices."
+    }
+  },
+  "q_triage": {
+    "type": "noul",
+    "instructions": "Is this triage pass acceptable as the basis for cuts, or is it a rubber stamp that must be rerun?",
+    "criteria": {
+      "true": "The pass applies the standard entry by entry, justifies each cut as stale, finished, or interim, is not a rubber stamp, and respects owner choices",
+      "false": "Any of those fails, including a zero cut pass that does not show why every entry meets the keep standard"
+    }
+  },
+  "q_done": {
+    "type": "score",
+    "instructions": "Score the purged memory file from 1 to 10. Is it ready to terminate?",
+    "criteria": [
+      "result_verified: Before and after byte counts are shown, along with the list of cut entries.",
+      "overrides_disclosed: Every cut the executor declined to apply is reported with its reason.",
+      "no_rule_loss: No rule carrying entry was removed.",
+      "residual_slop: No remaining entry is stale, finished, or interim."
+    ]
+  }
+}
