@@ -119,9 +119,10 @@ class TestClefDecide(unittest.TestCase):
         # to the SystemOne endpoint exactly as given; the endpoint, not
         # this CLI, decides which models it serves.
         for model in ("gpt-4", "clef-turbo", "oracle-1", "someone-elses-model"):
-            cap = {}
-            clef.call_clef(model, "s", QUESTIONS, _opener=make_opener(cap))
-            self.assertEqual(cap["body"]["model"], model, msg=model)
+            with self.subTest(model=model):
+                cap = {}
+                clef.call_clef(model, "s", QUESTIONS, _opener=make_opener(cap))
+                self.assertEqual(cap["body"]["model"], model)
 
     def test_answers_by_id_and_usage(self):
         cap = {}
@@ -135,7 +136,11 @@ class TestClefDecide(unittest.TestCase):
         self.assertIn("input_tokens=120", human)
 
     def test_missing_key_stops(self):
-        with patch.dict(os.environ, {}, clear=True):
+        # Hermetic: also hide any real ~/.config/clef-decide/config, so the
+        # result does not depend on the machine the suite runs on.
+        with patch.dict(os.environ, {}, clear=True), \
+                patch.object(clef, "DEFAULT_CONFIG_PATH",
+                             "/nonexistent/clef-decide/test-config"):
             with self.assertRaises(clef.ClefError) as cm:
                 clef.call_clef("clef", "s", QUESTIONS, _opener=make_opener({}))
         self.assertIn("EXPERIENTIAL_API_KEY", str(cm.exception))
