@@ -215,6 +215,8 @@ python3 -m unittest discover -s tests
 - `bin/clef-decide` — the CLI. Python 3, stdlib only, zero dependencies.
 - `docs/quality-loop.md` — the six-phase workflow in full.
 - `docs/question-sets.md` — copy-paste question sets per phase, with state shapes.
+- `docs/learnings.md`: operating learnings and principles behind the loop.
+- `examples/reset/`: a worked run of the loop on a non code task.
 - `examples/launch-readiness/` — worked example: a launch-readiness gate.
 - `llms.txt` — the short machine-readable summary for LLMs and agents.
 - `tests/` — the mocked test suite (`test_clef_mock.py`, `test_claims.py`, `test_config.py`, `test_judges.py`, `test_panel_config.py`, `test_sot.py`).
