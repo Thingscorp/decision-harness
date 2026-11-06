@@ -299,3 +299,58 @@ Without a cap, review loops balloon. In the source practice, a forgotten loop gr
   }
 }
 ```
+
+## Optional cycle hardening gates
+
+These gates are optional. They harden any loop run, whether or not it produces code. Each one traces to a failure observed in real runs on 2026-11-05. Add a gate to a cycle's question set wherever the failure it prevents is possible.
+
+### preflight_ready
+
+Before a cycle starts, run one cheap probe per external dependency the run will need. Confirm that judge endpoints answer, that repo auth can write to the target, and that file grants are verified by byte size. The gate asks whether every dependency probed ready. It prevents a credential wall discovered after all content was built.
+
+```json
+{
+  "preflight_ready": {
+    "type": "noul",
+    "instructions": "Judge the proposition: before the cycle started, one cheap probe ran for each external dependency the run needs (judge endpoints answer, repo auth can write to the target, file grants verified by byte size), and every dependency probed ready.",
+    "criteria": {
+      "true": "The run record shows one probe per needed dependency, each with a ready result, logged before any cycle work began.",
+      "false": "A needed dependency was not probed, a probe failed, or probing happened after cycle work had started."
+    }
+  }
+}
+```
+
+### no_rubber_stamp
+
+Ask this after any judge pass that changed nothing: zero cuts, zero findings, or a straight accept. The gate asks whether the pass applied the stated standard entry by entry, with reasons a rerun could check. An empty result is allowed. An unexplained one is not. It prevents a purge judge whose first pass cut zero lines and read as thorough.
+
+```json
+{
+  "no_rubber_stamp": {
+    "type": "noul",
+    "instructions": "Judge the proposition: this judge pass, which changed nothing, applied the stated standard entry by entry and gave reasons a rerun could check.",
+    "criteria": {
+      "true": "The pass output addresses each entry against the stated standard and gives a specific, checkable reason for keeping it.",
+      "false": "The pass gives a blanket verdict, skips entries, or offers reasons too general for a rerun to confirm or refute."
+    }
+  }
+}
+```
+
+### schema_conformant
+
+Check every structured output mechanically against its consumer's schema before assembly. The JSON must parse, required fields must be present, and no extra fields may change meaning. The gate asks whether that check ran and passed, with any format repair disclosed in the run record. It prevents three outputs arriving in a shape the helper could not consume, and a conversion that silently drops a criteria map.
+
+```json
+{
+  "schema_conformant": {
+    "type": "noul",
+    "instructions": "Judge the proposition: every structured output was checked mechanically against its consumer's schema before assembly (JSON parses, required fields present, no extras that change meaning), the check passed, and any format repair is disclosed in the run record.",
+    "criteria": {
+      "true": "A mechanical check ran on every structured output before assembly, all outputs passed, and the run record lists each format repair made.",
+      "false": "An output was not checked, a check failed, or a repair (such as a conversion that dropped fields) is missing from the run record."
+    }
+  }
+}
+```
