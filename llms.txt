@@ -17,3 +17,5 @@ bin/clef-decide --state-file report.md --questions done.json --panel
 ```
 
 Key chain: `--api-key` → `$CLEF_API_KEY` → `$EXPERIENTIAL_API_KEY` (legacy) → `api_key=` in `~/.config/clef-decide/config`. SystemOne models: `clef` (default), `clef-flash`, `jev-latest` (`:free` suffix preserved). Luna (`gpt-6-luna-decisions`, fixed) uses the decisions route, choice questions only. SubQ (`subq-snap-preview`, fixed) runs on `https://api.subq.ai/v1/systemone` with its own key chain (`$SUBQ_API_KEY` → `subq_api_key=` in the config file); the Experiential key is never consulted for it. Question types: `choice`, `noul`, `score` — see `docs/question-sets.md` for the per-phase sets and default judge table.
+
+`docs/learnings.md` carries the operating learnings for the loop, and `examples/reset/` is a worked non code run.
