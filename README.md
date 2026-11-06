@@ -1,12 +1,12 @@
 # decision-harness
 
-A tribunal of AI decision helpers for coding agents. The agent does the legwork; judges make every gated decision. Plug in any SystemOne-compatible (or similar) decision endpoint via config — no fixed LLM or provider required.
+A tribunal of AI decision helpers for coding agents. The agent does the legwork; judges make every gated decision. Plug in any SystemOne-compatible decision endpoint via config — no fixed LLM or provider required.
 
 Routine gates go to a single judge; high-stakes termination can go to a panel (one judge, one vote, majority wins). None of the judges are chat models — they answer structured questions (choice / noul / score) about a state blob.
 
 ## Quickstart (any provider)
 
-Define judges entirely in `~/.config/clef-decide/config` (or via environment variables). Example for a custom decision endpoint:
+Define judges entirely in `~/.config/clef-decide/config` (or via environment variables). See `docs/adding-a-judge.md` for the three-line pattern.
 
 ```ini
 # ~/.config/clef-decide/config
@@ -27,18 +27,7 @@ See `docs/question-sets.md` for ready-to-use question files per phase and `docs/
 
 ## Judges
 
-`--judge` selects the judge (default `clef` if configured). Custom judges are defined with three config lines and can use any model name their endpoint accepts:
-
-```ini
-judge_oracle_endpoint=https://oracle.example/v1/systemone
-judge_oracle_model=oracle-1
-judge_oracle_api_key=...
-```
-
-- Built-in names (`clef`, `clef-flash`, `jev`, `luna`, `subq`) exist as shortcuts when their provider keys are present.
-- Luna uses a decisions-style route (choice questions only).
-- SubQ uses its own endpoint and key.
-- Any other SystemOne-compatible endpoint is just another custom judge.
+`--judge` selects the judge. Custom judges are defined with three config lines and can use any model name their endpoint accepts. Named judges are optional shortcuts.
 
 ### Panel votes
 
@@ -71,6 +60,7 @@ Custom judges never consult the default Experiential key. Missing key for a judg
 - `docs/quality-loop.md` — six-phase workflow.
 - `docs/question-sets.md` — per-phase question sets.
 - `docs/harness-insights.md` — state design, judge selection, cost, measurement.
+- `docs/adding-a-judge.md` — how to define an arbitrary judge in three lines.
 - `examples/` — worked examples.
 - `tests/` — fully mocked test suite.
 
