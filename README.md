@@ -60,7 +60,7 @@ bin/clef-decide --state-file state.md --questions questions.json --model clef-fl
 - `luna` — the `/v1/decisions` route (model `gpt-6-luna-decisions`, fixed). Structured scored audits with rationale — the audit trail. Choice questions only; use a SystemOne judge for `noul`/`score`.
 - `subq` — SubQ Snap (`subq-snap-preview`, fixed) on `https://api.subq.ai/v1/systemone`, a SystemOne-compatible endpoint. Fast triage judge; supports `choice`, `noul`, and `score` like the other SystemOne judges. Needs its own key: `$SUBQ_API_KEY` or `subq_api_key=` in `~/.config/clef-decide/config`.
 
-Only `clef`, `clef-flash`, and `jev-latest` (plus a `:free` suffix spelling, preserved verbatim) are accepted on the SystemOne route — anything else is rejected, since none of these are chat models. Request shape reference: the [SystemOne quickstart](https://docs.typesafe.ai/introduction/quickstart).
+For the **built-in SystemOne judges** on the default Experiential Labs endpoint, only `clef`, `clef-flash`, and `jev-latest` (plus a `:free` suffix spelling, preserved verbatim) are accepted — anything else is rejected so the tool does not send chat-model names to a decision endpoint. Custom judges (any SystemOne-compatible endpoint) can use whatever model name their provider expects. Request shape reference: the [SystemOne quickstart](https://docs.typesafe.ai/introduction/quickstart).
 
 ### Panel votes
 
@@ -190,9 +190,9 @@ harnesses auto-discover.
   `subq_api_key=` in the config file) and never consults the Experiential
   key. Missing key stops the helper — it never prompts, never logs.
 - SystemOne model is sent as `clef`, `clef-flash`, or `jev-latest` exactly
-  (a `:free` suffix spelling is preserved if explicitly selected). Luna's model
+  (a `:free` suffix spelling is preserved if explicitly selected) **for the built-in judges on the default endpoint**. Luna's model
   is fixed (`gpt-6-luna-decisions`); SubQ's is fixed (`subq-snap-preview`).
-  Anything else is rejected.
+  Custom judges use the model name from their config definition. Anything else is rejected on the built-in SystemOne route.
 - **No retries, no idempotency key.** An unknown outcome may already be charged, so the helper never re-sends on its own. (A panel tie triggers one fresh vote round, not a retried request.)
 - Context budget: 16,384 tokens shared by state + question definitions. Over budget is refused before sending.
 - Gateway bounds: ≤32 questions per request, ≤64 options per choice, 2–10 levels per score.
