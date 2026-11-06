@@ -1,4 +1,4 @@
-# The panel-loop quality process
+# The decision-harness quality process
 
 Six phases, recursive. The agent does the legwork; the panel makes every
 judgment call. Clef is one judge on the panel, not the panel: routine gates
@@ -44,7 +44,7 @@ every call:
 
 - **State is concise.** Diffs, test summaries, failure records, iteration
   reports. Never the whole repo. The helper refuses anything over the
-  16,384-token shared budget.
+  16,384-token shared budget. Prefer high-signal extracts over dumps (see `docs/harness-insights.md`).
 - **Batch independent questions** — up to 32 per request. Questions in one
   request must be independent: never chain. Ask triage first, then ask
   severity in the next call with the triage outcome in state.
@@ -55,6 +55,7 @@ every call:
   work or the evidence and re-run. Never bypass a failed gate silently, and
   never merge, ship, or close on a refused gate without explicit human
   order.
+- Prefer cheaper judges (clef-flash, subq) for high-volume gates; reserve the full panel and Luna for termination and high-stakes review.
 
 ## Phase 1 — Feature discovery
 
